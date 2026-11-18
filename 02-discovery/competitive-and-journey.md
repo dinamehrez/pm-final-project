@@ -14,4 +14,4 @@ Closes the app without watching anything.
 Reaches for a DVD from her own shelf. Her physical collection is the one source she trusts to be pre-selected.
 - **Core frustration, the exact moment the process feels most “broken”:** Finds “nothing I actually want” among 15,000 titles. With no mood or occasion browsing, and with search that only matches exact titles (BUG-1080), she has no way to narrow the field.
 - **The evidence, a specific quote or behavior from the research that proves this:** “nothing I actually want”
-- **Your journey map, a shareable link, or the map file you committed (e.g. journey-map.html):** file:///C:/Users/DinaMehrez/Downloads/priya_future_state_journey.html
+- **Your journey map, a shareable link, or the map file you committed (e.g. journey-map.html):** https://github.com/dinamehrez/pm-final-project/blob/dd62752ca4b78ac7b0a9fad68aafb86a3d43b18b/02-discovery/priya_future_state_journey.png
