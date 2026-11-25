@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StreamLine Spotlight Rail Prototype</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#EDEBE6;color:#1F2937;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.45}
+.page{max-width:1100px;margin:0 auto;padding:24px 16px 48px}
+h1{font-size:20px;margin:0 0 2px}
+.sub{font-size:13px;color:#6B7280;margin:0 0 20px}
+.layout{display:grid;grid-template-columns:372px 1fr;gap:24px;align-items:start}
+@media(max-width:860px){.layout{grid-template-columns:1fr}}
+.phone{width:372px;max-width:100%;height:720px;background:#0E0E12;border-radius:30px;border:6px solid #2A2A32;overflow:hidden;display:flex;flex-direction:column;color:#F3F2EE;position:relative}
+.bar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 8px;flex:none}
+.logo{font-weight:800;letter-spacing:.04em;color:#E5484D}
+.scr{flex:1;overflow-y:auto;padding-bottom:20px}
+.sec{padding:8px 0 4px}
+.sec h3{margin:0 16px 2px;font-size:15px}
+.sec p.cap{margin:0 16px 8px;font-size:12px;color:#A3A19A}
+.rail{display:flex;gap:10px;overflow-x:auto;padding:0 16px 6px;scroll-snap-type:x mandatory}
+.card{flex:none;width:200px;background:#1B1B22;border:1px solid #2C2C36;border-radius:12px;overflow:hidden;color:inherit;font:inherit;text-align:left;padding:0;cursor:pointer;scroll-snap-align:start}
+.card:focus-visible,.btn:focus-visible,.chip:focus-visible{outline:2px solid #8B7CFF;outline-offset:2px}
+.art{height:104px;display:flex;align-items:flex-end;padding:8px;font-weight:700;font-size:13px;color:rgba(255,255,255,.92)}
+.cb{padding:10px 10px 12px}
+.ct{font-weight:600;font-size:14px;margin:0 0 4px}
+.cn{font-size:12px;color:#B8B6AE;margin:0}
+.card.noart{padding-top:2px}
+.row{display:flex;gap:8px;overflow-x:auto;padding:0 16px}
+.mini{flex:none;width:92px;height:56px;border-radius:8px;opacity:.55}
+.dim{font-size:11px;color:#6F6D66;margin:6px 16px 0}
+.btn{font:inherit;border:0;border-radius:10px;padding:12px 16px;font-weight:600;cursor:pointer}
+.play{width:100%;background:#E5484D;color:#fff;font-size:16px}
+.back{background:none;border:0;color:#F3F2EE;font:inherit;cursor:pointer;padding:0}
+.hero{height:200px;display:flex;align-items:flex-end;padding:16px;font-size:24px;font-weight:700}
+.pad{padding:16px}
+.tag{display:inline-block;font-size:11px;font-weight:700;color:#C8C1FF;background:#2C2750;border-radius:999px;padding:3px 9px;margin-bottom:8px}
+.meta{font-size:13px;color:#A3A19A;margin:4px 0 14px}
+.note{background:#1B1B22;border:1px solid #3A3560;border-radius:12px;padding:14px;margin-bottom:16px}
+.note b{display:block;font-size:11px;letter-spacing:.06em;color:#A9A3E8;margin-bottom:6px}
+.note p{margin:0;font-size:16px}
+.err{color:#FF8A8F;font-size:13px;margin:10px 0 0}
+.player{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;background:#000}
+.ok{color:#7BD88F;font-weight:700;margin-bottom:6px}
+.prog{width:100%;height:4px;background:#2C2C36;border-radius:2px;margin:18px 0 6px}
+.prog i{display:block;width:3%;height:100%;background:#E5484D;border-radius:2px}
+.panel{background:#fff;border:1px solid #DAD7CF;border-radius:14px;padding:14px 16px;margin-bottom:14px}
+.panel h2{font-size:14px;margin:0 0 4px;letter-spacing:.04em}
+.panel p.help{font-size:12px;color:#6B7280;margin:0 0 10px}
+.ctl{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px}
+.ctl label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.slot{display:grid;grid-template-columns:1fr auto;gap:6px;margin-bottom:8px;padding:8px;border:1px solid #E5E2DA;border-radius:10px}
+.slot select,.slot input{font:inherit;font-size:13px;padding:6px 8px;border:1px solid #CFCBC1;border-radius:8px;width:100%}
+.slot .x{grid-row:1/3;grid-column:2;align-self:center}
+.cnt{font-size:11px;color:#6B7280;text-align:right}
+.cnt.bad{color:#B42318;font-weight:700}
+.chip{font:inherit;font-size:13px;border:1px solid #CFCBC1;background:#fff;border-radius:8px;padding:6px 10px;cursor:pointer}
+.chip.pri{background:#3C3489;color:#fff;border-color:#3C3489}
+.chip.dng{color:#B42318;border-color:#E9B4AE}
+.msg{font-size:13px;margin:8px 0 0}
+.msg.bad{color:#B42318}.msg.good{color:#1B6B2E}.msg.warn{color:#8A5300}
+.log{font:12px ui-monospace,Menlo,Consolas,monospace;max-height:170px;overflow:auto;background:#F7F6F3;border-radius:8px;padding:8px}
+.log div{padding:1px 0}
+.stats{display:flex;gap:16px;font-size:13px;margin-bottom:8px;flex-wrap:wrap}
+.stats b{font-size:18px;display:block}
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>Spotlight Curated Rail prototype</h1>
+  <p class="sub">Tap a pick in the phone to run the core flow. Use the panels to test the holdout, editor rules and unhappy paths.</p>
+  <div class="layout">
+    <div class="phone" id="phone" aria-label="Phone prototype"></div>
+    <div>
+      <section class="panel">
+        <h2>1. SIMULATE</h2>
+        <p class="help">The user group is locked for 12 weeks in production. Here you can switch it to compare.</p>
+        <div class="ctl">
+          <label><input type="radio" name="grp" value="exposed" checked> Exposed user</label>
+          <label><input type="radio" name="grp" value="holdout"> Holdout user</label>
+        </div>
+        <div class="ctl" style="margin-top:8px">
+          <label><input type="checkbox" id="railFail"> Rail data fails to load</label>
+          <label><input type="checkbox" id="artFail"> Cover art fails (slow connection)</label>
+          <label><input type="checkbox" id="playFail"> Playback fails</label>
+        </div>
+      </section>
+      <section class="panel">
+        <h2>2. EDITOR: SLATE CONFIG</h2>
+        <p class="help">Rules: 5 to 7 titles, every title needs a note of 140 characters or fewer, and no unavailable titles.</p>
+        <div id="slots"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="chip" id="addPick">+ Add pick</button>
+          <button class="chip pri" id="publish">Publish slate</button>
+          <button class="chip" id="reset">Reset draft to live</button>
+        </div>
+        <div id="pubMsg"></div>
+        <div style="margin-top:12px;border-top:1px dashed #DAD7CF;padding-top:10px">
+          <div class="help" style="font-size:12px;color:#6B7280;margin-bottom:6px">Simulate a title leaving the catalog:</div>
+          <div class="ctl"><select id="rmSel" style="font:inherit;font-size:13px;padding:5px"></select>
+          <button class="chip dng" id="rmBtn">Remove from catalog</button>
+          <button class="chip" id="restoreBtn">Restore all</button></div>
+          <div id="liveMsg"></div>
+        </div>
+      </section>
+      <section class="panel">
+        <h2>3. EVENT LOG</h2>
+        <div class="stats">
+          <div><b id="sExp">0</b>rail exposures</div>
+          <div><b id="sTap">0</b>card taps</div>
+          <div><b id="sPlay">0</b>plays</div>
+          <div><b id="sRate">0%</b>plays per exposure</div>
+        </div>
+        <div class="log" id="log" aria-live="polite"></div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script>
+const catalog=[
+ {id:0,t:"The Quiet Hours",y:2019,g:"Drama",d:"1h 48m",h:215,on:true},
+ {id:1,t:"Salt & Lantern",y:2021,g:"Drama",d:"1h 36m",h:20,on:true},
+ {id:2,t:"Night Ferry to Marseille",y:2017,g:"Drama",d:"1h 52m",h:260,on:true},
+ {id:3,t:"Paper Moons",y:2015,g:"Comedy",d:"1h 31m",h:45,on:true},
+ {id:4,t:"A Small Country",y:2022,g:"Documentary",d:"1h 24m",h:150,on:true},
+ {id:5,t:"Gravel Road Waltz",y:2018,g:"Romance",d:"1h 41m",h:330,on:true},
+ {id:6,t:"The Last Cartographer",y:2020,g:"Mystery",d:"2h 02m",h:190,on:true},
+ {id:7,t:"Harbor Lights",y:2016,g:"Drama",d:"1h 39m",h:5,on:true},
+ {id:8,t:"Velvet Static",y:2023,g:"Thriller",d:"1h 55m",h:280,on:true},
+ {id:9,t:"Orchard Street",y:2014,g:"Comedy",d:"1h 28m",h:100,on:true},
+ {id:10,t:"Dust Season",y:2021,g:"Drama",d:"1h 47m",h:35,on:true},
+ {id:11,t:"Nine Days in June",y:2019,g:"Drama",d:"1h 44m",h:240,on:true}
+];
+const initial=[
+ {id:0,b:"A widow, a lighthouse and one slow winter. For a night when you want calm, not noise."},
+ {id:1,b:"Two sisters reopen their father's seaside cafe. Warm, funny and over before you want it to be."},
+ {id:2,b:"An overnight crossing where strangers trade secrets. Quiet, gripping and beautifully shot."},
+ {id:4,b:"A gentle documentary about the last year of a village school. Short, moving, easy to finish."},
+ {id:3,b:"A feel-good comedy about a failing puppet theater. Light enough for a Sunday."},
+ {id:6,b:"A mapmaker's final commission becomes a slow-burn mystery. Pull up a blanket."}
+];
+const S={screen:"home",group:"exposed",railFail:false,artFail:false,playFail:false,cur:null,playErr:false,
+ live:initial.map(x=>({...x})),draft:initial.map(x=>({...x})),pub:null,log:[],c:{e:0,t:0,p:0}};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const grad=h=>`linear-gradient(135deg,hsl(${h} 55% 32%),hsl(${(h+40)%360} 60% 18%))`;
+const visible=()=>S.live.filter(p=>catalog[p.id].on);
+const railShown=()=>S.group==="exposed"&&!S.railFail&&visible().length>0;
+
+function logEv(name,extra){
+  const tm=new Date().toLocaleTimeString([], {hour12:false});
+  S.log.unshift(`${tm}  ${name}  group=${S.group}${extra?"  "+extra:""}`);
+  renderLog();
+}
+function showHome(){
+  S.screen="home";S.cur=null;S.playErr=false;
+  if(railShown()){S.c.e++;logEv("rail_exposure","tag=spotlight");}
+  renderPhone();renderLog();
+}
+function openPick(id){
+  S.cur=id;S.screen="detail";S.playErr=false;S.c.t++;
+  logEv("card_tap","tag=spotlight title="+catalog[id].t);
+  renderPhone();
+}
+function play(){
+  if(S.playFail){S.playErr=true;renderPhone();logEv("play_error","returned_to=detail");return;}
+  S.screen="player";S.playErr=false;S.c.p++;
+  logEv("play_start","tag=spotlight title="+catalog[S.cur].t);
+  renderPhone();
+}
+
+function renderPhone(){
+  const ph=$("phone");
+  if(S.screen==="home"){
+    let rail="";
+    if(railShown()){
+      const cards=visible().map(p=>{const m=catalog[p.id];
+        const art=S.artFail?"":`<div class="art" style="background:${grad(m.h)}">${esc(m.t)}</div>`;
+        return `<button class="card ${S.artFail?"noart":""}" data-id="${m.id}" aria-label="Open ${esc(m.t)}">${art}<div class="cb"><p class="ct">${esc(m.t)}</p><p class="cn">${esc(p.b)}</p></div></button>`}).join("");
+      rail=`<div class="sec"><h3>Spotlight</h3><p class="cap">Tonight's picks, chosen by people</p><div class="rail">${cards}</div></div>`;
+    }
+    const minis=a=>`<div class="row">${a.map(i=>`<div class="mini" style="background:${grad(catalog[i].h)}"></div>`).join("")}</div>`;
+    ph.innerHTML=`<div class="bar"><span class="logo">STREAMLINE</span><span style="font-size:12px;color:#A3A19A">${S.group==="exposed"?"Exposed":"Holdout"}</span></div>
+      <div class="scr">${rail}
+      <div class="sec"><h3>Trending now</h3>${minis([7,8,9,10,11])}</div>
+      <div class="sec"><h3>Because you watched</h3>${minis([10,9,8,7,11])}</div>
+      <div class="dim">Existing rows are unchanged. Only the Spotlight rail is new.</div></div>`;
+  } else if(S.screen==="detail"){
+    const m=catalog[S.cur];const p=S.live.find(x=>x.id===S.cur);
+    ph.innerHTML=`<div class="bar"><button class="back" id="back">← Back</button><span class="logo">STREAMLINE</span></div>
+      <div class="scr"><div class="hero" style="background:${grad(m.h)}">${esc(m.t)}</div>
+      <div class="pad"><span class="tag">SPOTLIGHT PICK</span>
+      <div class="meta">${m.y} · ${m.g} · ${m.d}</div>
+      <div class="note"><b>EDITOR'S NOTE</b><p>${esc(p?p.b:"")}</p></div>
+      <button class="btn play" id="playBtn">▶ Play</button>
+      ${S.playErr?`<p class="err">Couldn't start playback. Tap Play to try again.</p>`:""}</div></div>`;
+  } else {
+    const m=catalog[S.cur];
+    ph.innerHTML=`<div class="bar"><button class="back" id="back">← Home</button><span class="logo">STREAMLINE</span></div>
+      <div class="player"><div class="ok">✓ Playback started</div><div style="font-size:20px;font-weight:700">${esc(m.t)}</div>
+      <div class="prog"><i></i></div><div style="font-size:12px;color:#A3A19A">0:12 / ${m.d}</div>
+      <div style="font-size:12px;color:#6F6D66;margin-top:18px">No trailer. Logged: play_start, tag=spotlight</div></div>`;
+  }
+}
+
+function renderSlots(){
+  $("slots").innerHTML=S.draft.map((p,i)=>`<div class="slot">
+    <select data-i="${i}" class="selT">${catalog.map(m=>`<option value="${m.id}" ${m.id===p.id?"selected":""}>${esc(m.t)}${m.on?"":" (unavailable)"}</option>`).join("")}</select>
+    <button class="chip dng x" data-i="${i}" aria-label="Remove pick ${i+1}">Remove</button>
+    <div><input data-i="${i}" class="inB" value="${esc(p.b)}" placeholder="One-line note, 140 characters or fewer" aria-label="Note for pick ${i+1}"><div class="cnt ${p.b.length>140?"bad":""}" id="cnt${i}">${p.b.length}/140</div></div></div>`).join("");
+  $("rmSel").innerHTML=catalog.map(m=>`<option value="${m.id}">${esc(m.t)}${m.on?"":" (removed)"}</option>`).join("");
+}
+function renderLive(){
+  const v=visible().length;const n=S.live.length-v;let h="";
+  if(n>0)h+=`<div class="msg warn">${n} title(s) hidden automatically. Editor alerted.</div>`;
+  if(v<5)h+=`<div class="msg bad">Alert: only ${v} titles remain in the live slate. The rail stays visible, so add replacements.</div>`;
+  $("liveMsg").innerHTML=h;
+}
+function renderPub(){
+  const p=S.pub;
+  $("pubMsg").innerHTML=!p?"":p.ok?`<div class="msg good">Published. In production this would be live within 15 minutes with no deploy.</div>`:p.errs.map(e=>`<div class="msg bad">• ${esc(e)}</div>`).join("");
+}
+function renderLog(){
+  $("log").innerHTML=S.log.length?S.log.map(l=>`<div>${esc(l)}</div>`).join(""):"No events yet.";
+  $("sExp").textContent=S.c.e;$("sTap").textContent=S.c.t;$("sPlay").textContent=S.c.p;
+  $("sRate").textContent=S.c.e?Math.round(S.c.p/S.c.e*100)+"%":"0%";
+}
+
+function validate(d){
+  const errs=[];
+  if(d.length===0)errs.push("Slate is empty. Add 5 to 7 titles.");
+  else if(d.length<5)errs.push(`Too few titles (${d.length}). Minimum is 5.`);
+  if(d.length>7)errs.push(`Too many titles (${d.length}). Maximum is 7.`);
+  d.forEach((p,i)=>{const m=catalog[p.id];
+    if(!p.b.trim())errs.push(`Pick ${i+1} (${m.t}) has no note. Publish blocked.`);
+    if(p.b.length>140)errs.push(`Pick ${i+1} (${m.t}) note is ${p.b.length} characters. Maximum is 140.`);
+    if(!m.on)errs.push(`Pick ${i+1} (${m.t}) is unavailable and can't be published.`);
+  });
+  const ids=d.map(p=>p.id);if(new Set(ids).size!==ids.length)errs.push("The same title appears more than once.");
+  return errs;
+}
+
+document.addEventListener("click",e=>{
+  const card=e.target.closest(".card");if(card&&$("phone").contains(card)){openPick(+card.dataset.id);return;}
+  if(e.target.id==="back"){showHome();return;}
+  if(e.target.id==="playBtn"){play();return;}
+  if(e.target.id==="addPick"){const used=S.draft.map(p=>p.id);const nx=catalog.find(m=>m.on&&!used.includes(m.id))||catalog[0];S.draft.push({id:nx.id,b:""});S.pub=null;renderSlots();renderPub();return;}
+  if(e.target.classList.contains("x")){S.draft.splice(+e.target.dataset.i,1);S.pub=null;renderSlots();renderPub();return;}
+  if(e.target.id==="publish"){const errs=validate(S.draft);
+    if(errs.length){S.pub={ok:false,errs};}
+    else{S.live=S.draft.map(p=>({...p}));S.pub={ok:true};logEv("slate_published","titles="+S.live.length);renderPhone();renderLive();}
+    renderPub();return;}
+  if(e.target.id==="reset"){S.draft=S.live.map(p=>({...p}));S.pub=null;renderSlots();renderPub();return;}
+  if(e.target.id==="rmBtn"){catalog[+$("rmSel").value].on=false;logEv("title_removed",catalog[+$("rmSel").value].t);renderSlots();renderLive();if(S.screen==="home")renderPhone();return;}
+  if(e.target.id==="restoreBtn"){catalog.forEach(m=>m.on=true);renderSlots();renderLive();if(S.screen==="home")renderPhone();return;}
+});
+document.addEventListener("input",e=>{
+  if(e.target.classList.contains("inB")){const i=+e.target.dataset.i;S.draft[i].b=e.target.value;const c=$("cnt"+i);c.textContent=e.target.value.length+"/140";c.className="cnt"+(e.target.value.length>140?" bad":"");}
+});
+document.addEventListener("change",e=>{
+  if(e.target.classList.contains("selT")){S.draft[+e.target.dataset.i].id=+e.target.value;}
+  if(e.target.name==="grp"){S.group=e.target.value;showHome();}
+  if(e.target.id==="railFail"){S.railFail=e.target.checked;showHome();}
+  if(e.target.id==="artFail"){S.artFail=e.target.checked;renderPhone();}
+  if(e.target.id==="playFail"){S.playFail=e.target.checked;}
+});
+
+renderSlots();renderLive();renderPub();showHome();
+</script>
+</body>
+</html>
