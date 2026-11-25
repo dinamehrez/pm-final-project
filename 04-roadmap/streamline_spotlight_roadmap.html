@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StreamLine Spotlight Roadmap</title>
+<style>
+:root{
+  --bg:#F7F6F3;--surface:#FFFFFF;--ink:#1F2937;--muted:#6B7280;--line:#E2E0D9;
+  --qw-bg:#EAF3DE;--qw-fg:#27500A;--qw-bd:#97C459;
+  --mp-bg:#E6F1FB;--mp-fg:#0C447C;--mp-bd:#85B7EB;
+  --fi-bg:#FAEEDA;--fi-fg:#633806;--fi-bd:#EF9F27;
+  --ts-bg:#FCEBEB;--ts-fg:#791F1F;--ts-bd:#F09595;
+  --accent:#3C3489;--accent-bg:#EEEDFE;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#16161A;--surface:#212127;--ink:#ECEBE6;--muted:#A3A19A;--line:#34343C;
+    --qw-bg:#27500A;--qw-fg:#C0DD97;--qw-bd:#639922;
+    --mp-bg:#0C447C;--mp-fg:#B5D4F4;--mp-bd:#378ADD;
+    --fi-bg:#633806;--fi-fg:#FAC775;--fi-bd:#BA7517;
+    --ts-bg:#791F1F;--ts-fg:#F7C1C1;--ts-bd:#E24B4A;
+    --accent:#CECBF6;--accent-bg:#3C3489;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5}
+.wrap{max-width:1180px;margin:0 auto;padding:32px 20px 56px}
+header{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between;align-items:flex-end;margin-bottom:20px}
+h1{font-size:26px;font-weight:600;margin:0}
+.sub{color:var(--muted);font-size:14px;margin-top:2px}
+.meta{display:flex;gap:8px;flex-wrap:wrap}
+.pill{font-size:12px;padding:4px 10px;border-radius:999px;background:var(--accent-bg);color:var(--accent);font-weight:500}
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:24px}
+.filters span.lbl{font-size:12px;color:var(--muted);margin-right:4px}
+.chip{font:inherit;font-size:13px;padding:5px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.chip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-bg);color:var(--accent);font-weight:600}
+.chip:focus-visible,.card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.lanes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start}
+.lane{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px}
+.lane-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.lane-head h2{font-size:15px;margin:0;letter-spacing:.06em;font-weight:700}
+.lane-head small{color:var(--muted);font-size:12px}
+.count{font-size:12px;color:var(--muted)}
+.card{display:block;width:100%;text-align:left;font:inherit;color:inherit;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px;cursor:pointer}
+.card:hover{border-color:var(--muted)}
+.card .top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.card .id{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.04em}
+.card .name{font-size:15px;font-weight:600;margin:2px 0 6px}
+.card .why{font-size:13px;color:var(--muted);margin:0}
+.badge{font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap;border:1px solid}
+.b-qw{background:var(--qw-bg);color:var(--qw-fg);border-color:var(--qw-bd)}
+.b-mp{background:var(--mp-bg);color:var(--mp-fg);border-color:var(--mp-bd)}
+.b-fi{background:var(--fi-bg);color:var(--fi-fg);border-color:var(--fi-bd)}
+.b-ts{background:var(--ts-bg);color:var(--ts-fg);border-color:var(--ts-bd)}
+.detail{display:none;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+.card.open .detail{display:block}
+.bar{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);margin:4px 0}
+.bar b{width:46px;font-weight:600;color:var(--ink)}
+.track{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.fill{height:100%;background:var(--accent)}
+.empty{font-size:13px;color:var(--muted);text-align:center;padding:22px 8px;border:1px dashed var(--line);border-radius:10px}
+.cut{margin-top:32px}
+.cut-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.cut-head h2{font-size:15px;margin:0;letter-spacing:.06em;font-weight:700}
+.cut-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.cut .card{margin:0;opacity:.92}
+.cut .name{text-decoration:line-through;text-decoration-color:var(--muted);text-decoration-thickness:1px}
+.legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px;font-size:12px;color:var(--muted);align-items:center}
+.hint{font-size:12px;color:var(--muted);margin:-12px 0 16px}
+footer{margin-top:28px;font-size:12px;color:var(--muted)}
+@media (max-width:900px){.lanes{grid-template-columns:1fr}.cut-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>StreamLine Spotlight roadmap</h1>
+      <div class="sub">Focus: remove choice overload for viewers like Priya, "The Overwhelmed Veteran"</div>
+    </div>
+    <div class="meta">
+      <span class="pill">2 engineers + 1 designer</span>
+      <span class="pill">3-week sprint</span>
+    </div>
+  </header>
+
+  <div class="filters" role="group" aria-label="Filter by quadrant">
+    <span class="lbl">Filter</span>
+    <button class="chip" data-q="all" aria-pressed="true">All</button>
+    <button class="chip" data-q="Quick Win" aria-pressed="false">Quick Win</button>
+    <button class="chip" data-q="Major Project" aria-pressed="false">Major Project</button>
+    <button class="chip" data-q="Fill-In" aria-pressed="false">Fill-In</button>
+    <button class="chip" data-q="Time Sinker" aria-pressed="false">Time Sinker</button>
+  </div>
+  <p class="hint">Click a card to see its Value and Effort scores.</p>
+
+  <main class="lanes" id="lanes"></main>
+
+  <section class="cut" aria-labelledby="cut-title">
+    <div class="cut-head">
+      <h2 id="cut-title">CUT LIST</h2>
+      <span class="count" id="cut-count"></span>
+    </div>
+    <div class="cut-grid" id="cut"></div>
+  </section>
+
+  <div class="legend">
+    <span class="badge b-qw">Quick Win</span> Value 4-5, Effort 1-3
+    <span class="badge b-mp">Major Project</span> Value 4-5, Effort 4-5
+    <span class="badge b-fi">Fill-In</span> Value 1-3, Effort 1-3
+    <span class="badge b-ts">Time Sinker</span> Value 1-3, Effort 4-5
+  </div>
+  <footer>Scores are PM estimates. Effort has not been validated against the codebase.</footer>
+</div>
+
+<script>
+const items = [
+  {id:"A1", name:"Spotlight Curated Rail", lane:"NOW", q:"Quick Win", v:5, e:2,
+   why:"A bounded human slate hits Priya's browse-then-leave friction head-on and moves Browse → Play directly."},
+  {id:"A3", name:"Hidden Gem Badge", lane:"LATER", q:"Fill-In", v:3, e:2,
+   why:"It adds one more label to an already noisy catalog and doesn't tell Priya what to watch tonight."},
+  {id:"A2", name:"'Why You'll Love This' Label", lane:"CUT", q:"Fill-In", v:3, e:3,
+   why:"Hover doesn't exist on TV or touch, and AI-written reasons clash with the human-led, trust-restoring strategy."},
+  {id:"A4", name:"Mood-Based Entry Point", lane:"CUT", q:"Time Sinker", v:3, e:4,
+   why:"Only Beth (UXR-09) asks for it, it needs mood tagging across 15,000 titles, and an extra step could hurt time-to-play."},
+  {id:"A5", name:"Personalized Spotlight Queue", lane:"CUT", q:"Time Sinker", v:2, e:5,
+   why:"It rebuilds the algorithm users distrust (UXR-02, UXR-10, BUG-1091) on a pipeline we can't build in three weeks."},
+  {id:"A6", name:"Spotlight Digest Email", lane:"CUT", q:"Fill-In", v:3, e:3,
+   why:"Tom's UXR-04 shows email works, but it bypasses the in-app browse step our primary metric measures."},
+  {id:"A7", name:"Curator Profiles", lane:"CUT", q:"Time Sinker", v:2, e:4,
+   why:"Priya never asks to follow curators, and profiles and follow mechanics add another surface to browse."},
+  {id:"A8", name:"Watch Party (Spotlight)", lane:"CUT", q:"Time Sinker", v:1, e:5,
+   why:"There is zero evidence in our research, and synchronized playback is a large lift on every TV platform."},
+  {id:"A9", name:"Advanced Filter Engine", lane:"CUT", q:"Fill-In", v:2, e:3,
+   why:"Priya wants someone to \"just tell me what's good\" (UXR-12), and filters hand the work back to her."},
+  {id:"A10", name:"Offline Download (Spotlight)", lane:"CUT", q:"Time Sinker", v:1, e:4,
+   why:"It has nothing to do with discovery, and licensing and DRM make it expensive."}
+];
+const lanes = [
+  {key:"NOW", sub:"3-week sprint"},
+  {key:"NEXT", sub:"Following 1-2 sprints"},
+  {key:"LATER", sub:"Backlog"}
+];
+const cls = {"Quick Win":"b-qw","Major Project":"b-mp","Fill-In":"b-fi","Time Sinker":"b-ts"};
+let filter = "all";
+
+function esc(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+
+function card(it){
+  return `<button class="card" aria-expanded="false" data-id="${it.id}">
+    <div class="top">
+      <div><div class="id">${it.id}</div><div class="name">${esc(it.name)}</div></div>
+      <span class="badge ${cls[it.q]}">${it.q}</span>
+    </div>
+    <p class="why">${esc(it.why)}</p>
+    <div class="detail">
+      <div class="bar"><b>Value</b><div class="track"><div class="fill" style="width:${it.v*20}%"></div></div>${it.v}/5</div>
+      <div class="bar"><b>Effort</b><div class="track"><div class="fill" style="width:${it.e*20}%"></div></div>${it.e}/5</div>
+    </div>
+  </button>`;
+}
+
+function render(){
+  const match = it => filter==="all" || it.q===filter;
+  const lanesEl = document.getElementById("lanes");
+  lanesEl.innerHTML = lanes.map(l=>{
+    const all = items.filter(i=>i.lane===l.key);
+    const shown = all.filter(match);
+    let body;
+    if(all.length===0) body = `<div class="empty">Nothing scheduled</div>`;
+    else if(shown.length===0) body = `<div class="empty">No items match this filter</div>`;
+    else body = shown.map(card).join("");
+    return `<section class="lane" aria-label="${l.key}">
+      <div class="lane-head"><div><h2>${l.key}</h2><small>${l.sub}</small></div><span class="count">${all.length}</span></div>
+      ${body}</section>`;
+  }).join("");
+
+  const cutAll = items.filter(i=>i.lane==="CUT");
+  const cutShown = cutAll.filter(match);
+  document.getElementById("cut").innerHTML = cutShown.length ? cutShown.map(card).join("") : `<div class="empty">No cut items match this filter</div>`;
+  document.getElementById("cut-count").textContent = `${cutAll.length} items cut`;
+}
+
+document.addEventListener("click",e=>{
+  const chip = e.target.closest(".chip");
+  if(chip){
+    filter = chip.dataset.q;
+    document.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed", c===chip ? "true":"false"));
+    render();
+    return;
+  }
+  const c = e.target.closest(".card");
+  if(c){
+    const open = c.classList.toggle("open");
+    c.setAttribute("aria-expanded", open ? "true":"false");
+  }
+});
+render();
+</script>
+</body>
+</html>
