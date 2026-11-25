@@ -41,3 +41,4 @@
 - **A8 Watch Party (Spotlight)**, There is zero evidence in our research, and synchronized playback is a large lift on every TV platform.
 - **A9 Advanced Filter Engine**, Priya wants someone to "just tell me what's good" (UXR-12), and filters hand the work back to her.
 - **A10 Offline Download (Spotlight)**, It has nothing to do with discovery, and licensing and DRM make it expensive.
+https://github.com/dinamehrez/pm-final-project/blob/02f5a47435d30d14b60516c208d57a83a37f13b4/04-roadmap/streamline_spotlight_roadmap.html
